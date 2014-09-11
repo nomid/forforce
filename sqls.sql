@@ -1,4 +1,4 @@
--- 1. total balance
+-- 1. суммарный баланс на счету всех пользователей
 SELECT SUM(balance) AS 'total balance:'
 FROM phones_tbl;
 -- 2. количество номеров телефонов по операторам

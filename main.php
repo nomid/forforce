@@ -1,9 +1,13 @@
 <?php
 /**
-* parent class
+* Родительский класс от которого будут наследоваться класс юзеров и класс
+* телефонов. 
 */
 class Main{
-	
+	/**
+	* Конструктор получает все столбцы таблицы и создает свойства объекта,
+	* принимая значения из переданного в параметры ассоциативного массива
+	*/
 	function __construct($params = null){
 		$this->table_name = strtolower(get_class($this)).'s_tbl';
 		$this->fields = $this->get_fields();
@@ -14,6 +18,10 @@ class Main{
         }
 	}
 
+	/**
+	* Создает строку в бд с данными из свойств объекта или обновляет
+	* какие-то значения, если строка существует
+	*/
 	public function save(){
 		$fields = $this->fields;
 		$columns = array();
@@ -60,6 +68,9 @@ class Main{
 		return $this;
 	}
 
+	/**
+	* Удаляет строку в бд, соответствующую объекту
+	*/
 	public function destroy(){
 		$fields = $this->fields;
 		$query 	= 'DELETE FROM '.$this->table_name.' WHERE ';
@@ -70,7 +81,6 @@ class Main{
 		}
 		$query = rtrim($query, ' AND ');
 
-		var_dump($query);
 		return DB::query($query);
 	}
 

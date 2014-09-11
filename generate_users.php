@@ -25,8 +25,9 @@ $mysqli->query('CREATE TABLE IF NOT EXISTS phones_tbl(
 				user_id 		INT,
 				country_code 	SMALLINT UNSIGNED NOT NULL,
 				operator_code 	SMALLINT UNSIGNED NOT NULL,
-				phone_number 	INT UNSIGNED NOT NULL UNIQUE,
+				phone_number 	INT UNSIGNED NOT NULL,
 				balance 		INT NOT NULL DEFAULT 0,
+				UNIQUE KEY phone_number(country_code, operator_code, phone_number),
 				FOREIGN KEY (user_id) 
 			        REFERENCES users_tbl(id)
 			        ON DELETE CASCADE);');
@@ -67,14 +68,16 @@ function generate_phones($n){
 	for($i=0; $i<$n; $i++){
 		//prevent the possibility of repeating of telephone number
 		do{
-			$phone_number = random_phone_number();
-			$check_number = $mysqli->query('SELECT phone_number 
+			$operator_code 	= random_operator_code();
+			$phone_number 	= random_phone_number();
+			$check_number 	= $mysqli->query('SELECT phone_number 
 											FROM phones_tbl
-											WHERE phone_number = '.$phone_number.';');
+											WHERE phone_number = '.$phone_number.'
+											AND country_code=380
+											AND operator_code='.$operator_code.';');
 		}
 		while($check_number->num_rows !== 0);
-		$operator_code 	= random_operator_code();
-		$balance 		= random_balance();
+		$balance = random_balance();
 		
 		$phone = array( 'country_code' 	=> '380',
 						'operator_code'	=> $operator_code,
